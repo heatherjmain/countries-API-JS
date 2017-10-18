@@ -20,7 +20,7 @@ var addCountriesToDropDown = function(countries) {
 }
 
 var addNeeborCountries = function(neeborCountries) {
-  
+
   var dropDown = document.getElementById("neebors");
 
   dropDown.innerHTML = ""
@@ -28,6 +28,8 @@ var addNeeborCountries = function(neeborCountries) {
   for (var country of neeborCountries){
     var option = document.createElement("option")
     option.innerHTML = country
+    console.log("this:", this)
+    console.log("country", country)
     dropDown.appendChild(option)
   }
 }
@@ -52,7 +54,9 @@ var render = function(countries){
 
 
   var handleSelectChange = function() {
-    addNeeborCountries(savedCountry.borders)
+    if ( savedCountry ) {
+      addNeeborCountries(savedCountry.borders)
+    }
     var selectedCountryName = this.value;
     findCountryObject(selectedCountryName, countries);
   }
@@ -74,9 +78,6 @@ buttonClear.addEventListener('click', function() {
 })
 
 
-
-
-
 var findCountryObject = function(countryName, countries) {
   for(var country of countries){
     if (country.name === countryName){
@@ -92,17 +93,21 @@ var writeContent = function(country) {
   var pTag2 = document.querySelector("#selectedDDPop")
   var pTag3 = document.querySelector("#selectedDDCapital")
 
-  var countryStringName = "Country Name: " + country.name
-  var countryStringPop =  "Country Population: " + country.population
-  var countryStringCapital = "Country Capital: " + country.capital
-  var jsonString = JSON.stringify(country)
-  localStorage.setItem("country", jsonString)
-  addNeeborCountries(country.borders)
+  if ( country ) {
+    var countryStringName = "Country Name: " + country.name
+    var countryStringPop =  "Country Population: " + country.population
+    var countryStringCapital = "Country Capital: " + country.capital
+    var jsonString = JSON.stringify(country)
+    localStorage.setItem("country", jsonString)
+    addNeeborCountries(country.borders)
 
 
-  pTag1.innerHTML = countryStringName
-  pTag2.innerHTML = countryStringPop
-  pTag3.innerHTML = countryStringCapital
+    pTag1.innerHTML = countryStringName
+    pTag2.innerHTML = countryStringPop
+    pTag3.innerHTML = countryStringCapital
+  }
+
+
 }
 
 makeRequest(url)
